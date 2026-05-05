@@ -1,6 +1,11 @@
 resource "azurerm_resource_group" "rg" {
   name     = "rg-terraform-assignment"
   location = var.location
+
+  tags = {
+    environment = "dev"
+    project     = "assignment"
+  }
 }
 
 resource "azurerm_virtual_network" "vnet" {
@@ -8,6 +13,11 @@ resource "azurerm_virtual_network" "vnet" {
   address_space       = ["10.0.0.0/16"]
   location            = azurerm_resource_group.rg.location
   resource_group_name = azurerm_resource_group.rg.name
+
+  tags = {
+    environment = "dev"
+    project     = "assignment"
+  }
 }
 
 resource "azurerm_subnet" "subnet" {
@@ -23,6 +33,11 @@ resource "azurerm_public_ip" "public_ip" {
   resource_group_name = azurerm_resource_group.rg.name
   allocation_method   = "Static"
   sku                 = "Standard"
+
+  tags = {
+    environment = "dev"
+    project     = "assignment"
+  }
 }
 
 resource "azurerm_network_interface" "nic" {
@@ -35,6 +50,11 @@ resource "azurerm_network_interface" "nic" {
     subnet_id                     = azurerm_subnet.subnet.id
     private_ip_address_allocation = "Dynamic"
     public_ip_address_id          = azurerm_public_ip.public_ip.id
+  }
+
+  tags = {
+    environment = "dev"
+    project     = "assignment"
   }
 }
 
@@ -53,6 +73,11 @@ resource "azurerm_network_security_group" "nsg" {
     destination_port_range     = "22"
     source_address_prefix      = "*"
     destination_address_prefix = "*"
+  }
+
+  tags = {
+    environment = "dev"
+    project     = "assignment"
   }
 }
 
@@ -85,5 +110,10 @@ resource "azurerm_linux_virtual_machine" "vm" {
     offer     = "0001-com-ubuntu-server-jammy"
     sku       = "22_04-lts"
     version   = "latest"
+  }
+
+  tags = {
+    environment = "dev"
+    project     = "assignment"
   }
 }
