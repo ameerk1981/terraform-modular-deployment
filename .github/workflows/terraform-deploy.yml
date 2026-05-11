@@ -35,13 +35,10 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      -- name: Azure Login
+      --- name: Azure Login
   uses: azure/login@v2
   with:
-    client-id: 2ad8b30b-45b7-4ffc-9e79-389fb357373c
-    tenant-id: 7fa45e59-ccd9-43fb-8d9f-d639b73dcbea
-    subscription-id: 4c3c4430-0ce6-48bc-8e33-1947f3876ebd
-    client-secret: ${{ secrets.AZURE_CLIENT_SECRET }}
+    creds: ${{ secrets.AZURE_CREDENTIALS }}
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
