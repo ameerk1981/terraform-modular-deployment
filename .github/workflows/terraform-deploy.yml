@@ -28,9 +28,6 @@ jobs:
       run:
         working-directory: environments/dev
 
-    env:
-      ARM_ACCESS_KEY: ${{ secrets.ARM_ACCESS_KEY }}
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -38,7 +35,7 @@ jobs:
       - name: Azure Login
         uses: azure/login@v2
         with:
-          creds: ${{ secrets.AZURE_CREDENTIALS }}
+          creds: ${{ secrets.AZURE_CREDENTIALS_AK }}
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
@@ -50,13 +47,11 @@ jobs:
         run: terraform validate
 
       - name: Terraform Plan
-        if: github.event_name == 'pull_request'
         run: terraform plan
 
       - name: Terraform Apply
-        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
         run: terraform apply -auto-approve
 
       - name: Terraform Destroy
-        if: github.event_name == 'workflow_dispatch' && github.event.inputs.action == 'destroy'
+        if: ${{ github.event.inputs.action == 'destroy' }}
         run: terraform destroy -auto-approve
